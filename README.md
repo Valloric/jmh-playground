@@ -1,6 +1,12 @@
 # JMH Playground
 
-Running benchmarks:
+[JMH][] is _the_ state-of-the-art Java Microbenchmarking Harness. Setting it up
+and learning how to use it can be a bit difficult; hopefully this repo makes
+this process easier for others.
+
+[jmh]: http://openjdk.java.net/projects/code-tools/jmh/
+
+## How to run benchmarks
 
 ```
 # Runs both 'clean' and 'shadowJar' by default, which is what you want
