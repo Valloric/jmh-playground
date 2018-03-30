@@ -12,7 +12,7 @@ hopefully this repo makes this process easier for others.
 # Runs both 'clean' and 'shadowJar' by default, which is what you want
 ./gradlew
 
-# Runs the benchmark that matches the provide regex; pass -h instead of a regex
+# Runs the benchmark that matches the provided regex; pass -h instead of a regex
 # to see all JMH options.
 java -jar build/libs/benchmarks.jar "HelloWorld"
 
