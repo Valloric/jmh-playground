@@ -41,6 +41,12 @@ proceed from there.
 depends on the benchmark, but probably no less than 5. A safer number is 10.
 - The more measurement iterations you use, the smaller the error margin
 reported by JMH at the end! A solid choice is 20 iterations.
+- If you really want to get that measurement error margin to be as small as
+  possible, reboot your machine and run your JMH benchmarks without anything
+  else running on your system. No browser, IDE etc taking up CPU time.
+  You can go even further by turning off dynamic CPU frequency scaling in your
+  system BIOS.
+  
 
 ## JMH command-line options
 
