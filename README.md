@@ -35,6 +35,13 @@ proceed from there.
 [samples]: https://github.com/Valloric/jmh-playground/tree/master/src/jmh/java/org/openjdk/jmh/samples
 [first-sample]: https://github.com/Valloric/jmh-playground/blob/master/src/jmh/java/org/openjdk/jmh/samples/JMHSample_01_HelloWorld.java
 
+## JMH tips & tricks
+
+- You _need_ warmup iterations because of JVM and JIT warmup. How many
+depends on the benchmark, but probably no less than 5. A safer number is 10.
+- The more measurement iterations you use, the smaller the error margin
+reported by JMH at the end! A solid choice is 20 iterations.
+
 ## JMH command-line options
 
 The full output is below; the "interesting" commands are:
