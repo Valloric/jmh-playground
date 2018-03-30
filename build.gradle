@@ -1,43 +1,41 @@
 plugins {
-    id 'me.champeau.gradle.jmh' version '0.4.3'
+  id 'me.champeau.gradle.jmh' version '0.4.5'
 }
 
 allprojects {
-    apply plugin: 'java'
-    apply plugin: 'idea'
+  apply plugin: 'java'
+  apply plugin: 'idea'
 
-    group = 'me.champeau.sample'
-    version = '1.0-SNAPSHOT'
+  group = 'io.markovic.sample'
+  version = '1.0'
 
-    sourceCompatibility = 1.8
-    targetCompatibility = 1.8
+  sourceCompatibility = 1.8
+  targetCompatibility = 1.8
 
-    repositories {
-        jcenter()
-    }
+  repositories {
+    jcenter()
+  }
 }
-
 
 apply plugin: 'me.champeau.gradle.jmh'
 
 jmh {
-    include = 'org\\.openjdk\\.jmh\\.samples\\.JMHSample_01_HelloWorld.*'
-    humanOutputFile = null
-    warmupIterations = 1
-    iterations = 1
+  include = 'org\\.openjdk\\.jmh\\.samples\\.JMHSample_01_HelloWorld.*'
+  humanOutputFile = null
+  warmupIterations = 1
+  iterations = 1
 }
 
 // it is possible to tweak the jmhJar task directly
 jmhJar.baseName = 'custom'
 
 subprojects {
-    apply plugin: 'me.champeau.gradle.jmh'
+  apply plugin: 'me.champeau.gradle.jmh'
 
-    jmh {
-        include = 'org\\.openjdk\\.jmh\\.samples\\.JMHSample_01_HelloWorld.*'
-        humanOutputFile = null
-        warmupIterations = 1
-        iterations = 1
-    }
-
+  jmh {
+    include = 'org\\.openjdk\\.jmh\\.samples\\.JMHSample_01_HelloWorld.*'
+    humanOutputFile = null
+    warmupIterations = 1
+    iterations = 1
+  }
 }
