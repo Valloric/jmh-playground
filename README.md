@@ -1,8 +1,8 @@
 # JMH Playground
 
 [JMH][] is _the_ state-of-the-art Java Microbenchmarking Harness. Setting it up
-and learning how to use it can be a bit difficult; hopefully this repo makes
-this process easier for others.
+(_especially_ with Gradle) and learning how to use it can be a bit difficult;
+hopefully this repo makes this process easier for others.
 
 [jmh]: http://openjdk.java.net/projects/code-tools/jmh/
 
@@ -23,7 +23,7 @@ java -jar build/libs/benchmarks.jar "HelloWorld" -f 1 -wi 8 -i 10
 ## Features
 
 Does NOT use the jmh-gradle-plugin which is confusing, brittle and difficult
-to use.
+to use correctly.
 
 ## Learning to use JMH
 
