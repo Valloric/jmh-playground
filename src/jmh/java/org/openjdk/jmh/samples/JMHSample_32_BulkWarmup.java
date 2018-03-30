@@ -32,84 +32,105 @@ package org.openjdk.jmh.samples;
 
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
-import org.openjdk.jmh.annotations.Fork;
+import org.openjdk.jmh.annotations.CompilerControl;
 import org.openjdk.jmh.annotations.Mode;
 import org.openjdk.jmh.annotations.OutputTimeUnit;
 import org.openjdk.jmh.annotations.Scope;
-import org.openjdk.jmh.annotations.Setup;
 import org.openjdk.jmh.annotations.State;
 import org.openjdk.jmh.runner.Runner;
 import org.openjdk.jmh.runner.RunnerException;
 import org.openjdk.jmh.runner.options.Options;
 import org.openjdk.jmh.runner.options.OptionsBuilder;
+import org.openjdk.jmh.runner.options.WarmupMode;
 
 import java.util.concurrent.TimeUnit;
 
 @State(Scope.Thread)
 @BenchmarkMode(Mode.AverageTime)
-@OutputTimeUnit(TimeUnit.MILLISECONDS)
-public class JMHSample_13_RunToRun {
+@OutputTimeUnit(TimeUnit.NANOSECONDS)
+public class JMHSample_32_BulkWarmup {
 
     /*
-     * Forking also allows to estimate run-to-run variance.
+     * This is an addendum to JMHSample_12_Forking test.
      *
-     * JVMs are complex systems, and the non-determinism is inherent for them.
-     * This requires us to always account the run-to-run variance as the one
-     * of the effects in our experiments.
+     * Sometimes you want an opposite configuration: instead of separating the profiles
+     * for different benchmarks, you want to mix them together to test the worst-case
+     * scenario.
      *
-     * Luckily, forking aggregates the results across several JVM launches.
+     * JMH has a bulk warmup feature for that: it does the warmups for all the tests
+     * first, and then measures them. JMH still forks the JVM for each test, but once the
+     * new JVM has started, all the warmups are being run there, before running the
+     * measurement. This helps to dodge the type profile skews, as each test is still
+     * executed in a different JVM, and we only "mix" the warmup code we want.
      */
 
     /*
-     * In order to introduce readily measurable run-to-run variance, we build
-     * the workload which performance differs from run to run. Note that many workloads
-     * will have the similar behavior, but we do that artificially to make a point.
+     * These test classes are borrowed verbatim from JMHSample_12_Forking.
      */
 
-    @State(Scope.Thread)
-    public static class SleepyState {
-        public long sleepTime;
+    public interface Counter {
+        int inc();
+    }
 
-        @Setup
-        public void setup() {
-            sleepTime = (long) (Math.random() * 1000);
+    public class Counter1 implements Counter {
+        private int x;
+
+        @Override
+        public int inc() {
+            return x++;
         }
     }
 
+    public class Counter2 implements Counter {
+        private int x;
+
+        @Override
+        public int inc() {
+            return x++;
+        }
+    }
+
+    Counter c1 = new Counter1();
+    Counter c2 = new Counter2();
+
     /*
-     * Now, we will run this different number of times.
+     * And this is our test payload. Notice we have to break the inlining of the payload,
+     * so that in could not be inlined in either measure_c1() or measure_c2() below, and
+     * specialized for that only call.
      */
 
-    @Benchmark
-    @Fork(1)
-    public void baseline(SleepyState s) throws InterruptedException {
-        TimeUnit.MILLISECONDS.sleep(s.sleepTime);
+    @CompilerControl(CompilerControl.Mode.DONT_INLINE)
+    public int measure(Counter c) {
+        int s = 0;
+        for (int i = 0; i < 10; i++) {
+            s += c.inc();
+        }
+        return s;
     }
 
     @Benchmark
-    @Fork(5)
-    public void fork_1(SleepyState s) throws InterruptedException {
-        TimeUnit.MILLISECONDS.sleep(s.sleepTime);
+    public int measure_c1() {
+        return measure(c1);
     }
 
     @Benchmark
-    @Fork(20)
-    public void fork_2(SleepyState s) throws InterruptedException {
-        TimeUnit.MILLISECONDS.sleep(s.sleepTime);
+    public int measure_c2() {
+        return measure(c2);
     }
 
     /*
      * ============================== HOW TO RUN THIS TEST: ====================================
      *
-     * Note the baseline is random within [0..1000] msec; and both forked runs
-     * are estimating the average 500 msec with some confidence.
+     * Note how JMH runs the warmups first, and only then a given test. Note how JMH re-warmups
+     * the JVM for each test. The scores for C1 and C2 cases are equally bad, compare them to
+     * the scores from JMHSample_12_Forking.
      *
      * You can run this test:
      *
      * a) Via the command line:
      *    $ mvn clean install
-     *    $ java -jar target/benchmarks.jar JMHSample_13 -wi 0 -i 3
-     *    (we requested no warmup, 3 measurement iterations)
+     *    $ java -jar target/benchmarks.jar JMHSample_32 -f 1 -wi 5 -i 5 -wm BULK
+     *    (we requested a single fork, 5 warmup/measurement iterations, and bulk warmup mode)
      *
      * b) Via the Java API:
      *    (see the JMH homepage for possible caveats when running from IDE:
@@ -118,9 +139,12 @@ public class JMHSample_13_RunToRun {
 
     public static void main(String[] args) throws RunnerException {
         Options opt = new OptionsBuilder()
-                .include(JMHSample_13_RunToRun.class.getSimpleName())
-                .warmupIterations(0)
+                .include(JMHSample_32_BulkWarmup.class.getSimpleName())
+                // .includeWarmup(...) <-- this may include other benchmarks into warmup
+                .warmupMode(WarmupMode.BULK) // see other WarmupMode.* as well
+                .warmupIterations(5)
                 .measurementIterations(5)
+                .forks(1)
                 .build();
 
         new Runner(opt).run();
