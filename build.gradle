@@ -1,41 +1,40 @@
 plugins {
-  id 'me.champeau.gradle.jmh' version '0.4.5'
+  // For building the final jar
+  id 'com.github.johnrengelman.shadow' version '2.0.3'
+  // For annotation processing
+  id 'net.ltgt.apt' version '0.15'
+  id 'java'
+  id 'idea'
 }
 
-allprojects {
-  apply plugin: 'java'
-  apply plugin: 'idea'
-
-  group = 'io.markovic.sample'
-  version = '1.0'
-
-  sourceCompatibility = 1.8
-  targetCompatibility = 1.8
-
-  repositories {
-    jcenter()
+sourceSets {
+  main {
+    java {
+      srcDirs = ['src/jmh']
+    }
   }
 }
 
-apply plugin: 'me.champeau.gradle.jmh'
-
-jmh {
-  include = 'org\\.openjdk\\.jmh\\.samples\\.JMHSample_01_HelloWorld.*'
-  humanOutputFile = null
-  warmupIterations = 1
-  iterations = 1
-}
-
-// it is possible to tweak the jmhJar task directly
-jmhJar.baseName = 'custom'
-
-subprojects {
-  apply plugin: 'me.champeau.gradle.jmh'
-
-  jmh {
-    include = 'org\\.openjdk\\.jmh\\.samples\\.JMHSample_01_HelloWorld.*'
-    humanOutputFile = null
-    warmupIterations = 1
-    iterations = 1
+jar {
+  manifest {
+    attributes 'Main-Class': 'org.openjdk.jmh.Main'
   }
 }
+
+repositories {
+  jcenter()
+}
+
+shadowJar {
+  baseName = 'benchmarks'
+  classifier = null
+  version = null
+}
+
+dependencies {
+  compile 'org.openjdk.jmh:jmh-core:1.20'
+  annotationProcessor 'org.openjdk.jmh:jmh-generator-annprocess:1.20'
+}
+
+// Running `./gradlew` runs these tasks by default
+defaultTasks 'clean', 'shadowJar'
