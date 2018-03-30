@@ -185,3 +185,10 @@ Command line options usually take precedence over annotations.
                               for the warmup.
 ```
 
+# License
+
+JMH samples (which are included in the source code) are licensed under
+[3-clause BSD license](http://hg.openjdk.java.net/code-tools/jmh/file/25d8b2695bac/jmh-samples/LICENSE).
+
+The rest of the code in this repo is licensed under [Apache v2](https://www.apache.org/licenses/LICENSE-2.0).
+
