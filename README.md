@@ -14,12 +14,12 @@ java -jar build/libs/benchmarks.jar "HelloWorld"
 java -jar build/libs/benchmarks.jar "HelloWorld" -f 1 -wi 8 -i 10
 ```
 
-# Features
+## Features
 
 Does NOT use the jmh-gradle-plugin which is confusing, brittle and difficult
 to use.
 
-# JMH command-line options
+## JMH command-line options
 
 The full output is below; the "interesting" commands are:
 - `-f <int>` for number of runs
@@ -185,7 +185,7 @@ Command line options usually take precedence over annotations.
                               for the warmup.
 ```
 
-# License
+## License
 
 JMH samples (which are included in the source code) are licensed under
 [3-clause BSD license](http://hg.openjdk.java.net/code-tools/jmh/file/25d8b2695bac/jmh-samples/LICENSE).
