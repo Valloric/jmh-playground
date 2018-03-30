@@ -39,8 +39,8 @@ proceed from there.
 
 The full output is below; the "interesting" commands are:
 - `-f <int>` for number of runs
-- `-i <int>` for number of iterations within a run
 - `-wi <int>` for number of *warmup* iterations within a run
+- `-i <int>` for number of *measurement* iterations within a run
 
 Note that all of these can be changed with JMH annotations on the benchmark
 itself (command line options override).
