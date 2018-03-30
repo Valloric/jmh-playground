@@ -197,7 +197,7 @@ Command line options usually take precedence over annotations.
 
 ## License
 
-JMH samples (which are included in the source code) are licensed under
+JMH samples (which are included in the source code) are licensed under the
 [3-clause BSD license][bsd].
 
 [bsd]: http://hg.openjdk.java.net/code-tools/jmh/file/25d8b2695bac/jmh-samples/LICENSE
