@@ -19,6 +19,16 @@ java -jar build/libs/benchmarks.jar "HelloWorld" -f 1 -wi 8 -i 10
 Does NOT use the jmh-gradle-plugin which is confusing, brittle and difficult
 to use.
 
+## Learning to use JMH
+
+The absolute best way to learn how to use JMH is to read through the official
+JMH samples. [All of them are included in this repo][samples]. Start by
+reading the [first sample file][first-sample] (they are all numbered) and
+proceed from there.
+
+[samples]: https://github.com/Valloric/jmh-playground/tree/master/src/jmh/java/org/openjdk/jmh/samples
+[first-sample]: https://github.com/Valloric/jmh-playground/blob/master/src/jmh/java/org/openjdk/jmh/samples/JMHSample_01_HelloWorld.java
+
 ## JMH command-line options
 
 The full output is below; the "interesting" commands are:
@@ -188,7 +198,11 @@ Command line options usually take precedence over annotations.
 ## License
 
 JMH samples (which are included in the source code) are licensed under
-[3-clause BSD license](http://hg.openjdk.java.net/code-tools/jmh/file/25d8b2695bac/jmh-samples/LICENSE).
+[3-clause BSD license][bsd].
 
-The rest of the code in this repo is licensed under [Apache v2](https://www.apache.org/licenses/LICENSE-2.0).
+[bsd]: http://hg.openjdk.java.net/code-tools/jmh/file/25d8b2695bac/jmh-samples/LICENSE
+
+The rest of the code in this repo is licensed under [Apache v2][apache].
+
+[apache]: https://www.apache.org/licenses/LICENSE-2.0
 
