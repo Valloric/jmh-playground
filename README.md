@@ -29,11 +29,39 @@ to use correctly.
 
 The absolute best way to learn how to use JMH is to read through the official
 JMH samples. [All of them are included in this repo][samples]. Start by
-reading the [first sample file][first-sample] (they are all numbered) and
+reading the [first sample file][] (they are all numbered) and
 proceed from there.
 
 [samples]: https://github.com/Valloric/jmh-playground/tree/master/src/jmh/java/org/openjdk/jmh/samples
-[first-sample]: https://github.com/Valloric/jmh-playground/blob/master/src/jmh/java/org/openjdk/jmh/samples/JMHSample_01_HelloWorld.java
+[first sample file]: https://github.com/Valloric/jmh-playground/blob/master/src/jmh/java/org/openjdk/jmh/samples/JMHSample_01_HelloWorld.java
+
+## Benchmarking pitfalls to be aware of
+
+READ **ALL** THE JMH SAMPLES before creating any benchmarks!
+There are many, many pitfalls that need to be avoided, lest your
+benchmarks end up producing false results. The JMH samples list out
+issues to watch out for and how to avoid them. Here's a summary:
+
+- Unintentional dead code elimination ([JMH sample 8][]).
+- Computations getting constant-folded ([JMH sample 10][]).
+- Loops in benchmarks having iterations merged by JIT ([JMH sample 11][]).
+    - [JMH sample 34][] covers the same issue and provides good advice.
+- False Sharing AKA independent fields on the same [cache line][] affecting
+each other ([JMH sample 22][]).
+- Test data helping or hurting branch prediction ([JMH sample 36][]).
+- Differences in cache access ([JMH sample 37][]).
+- Incorrect per-invocation benchmark setup ([JMH sample 38][]).
+
+[cache line]: https://en.wikipedia.org/wiki/CPU_cache
+
+[JMH sample 8]: https://github.com/Valloric/jmh-playground/blob/master/src/jmh/java/org/openjdk/jmh/samples/JMHSample_08_DeadCode.java
+[JMH sample 10]: https://github.com/Valloric/jmh-playground/blob/master/src/jmh/java/org/openjdk/jmh/samples/JMHSample_10_ConstantFold.java
+[JMH sample 11]: https://github.com/Valloric/jmh-playground/blob/master/src/jmh/java/org/openjdk/jmh/samples/JMHSample_11_Loops.java
+[JMH sample 22]: https://github.com/Valloric/jmh-playground/blob/master/src/jmh/java/org/openjdk/jmh/samples/JMHSample_22_FalseSharing.java
+[JMH sample 34]: https://github.com/Valloric/jmh-playground/blob/master/src/jmh/java/org/openjdk/jmh/samples/JMHSample_34_SafeLooping.java
+[JMH sample 36]: https://github.com/Valloric/jmh-playground/blob/master/src/jmh/java/org/openjdk/jmh/samples/JMHSample_36_BranchPrediction.java
+[JMH sample 37]: https://github.com/Valloric/jmh-playground/blob/master/src/jmh/java/org/openjdk/jmh/samples/JMHSample_37_CacheAccess.java
+[JMH sample 38]: https://github.com/Valloric/jmh-playground/blob/master/src/jmh/java/org/openjdk/jmh/samples/JMHSample_38_PerInvokeSetup.java
 
 ## JMH tips & tricks
 
@@ -42,11 +70,41 @@ depends on the benchmark, but probably no less than 5. A safer number is 10.
 - The more measurement iterations you use, the smaller the error margin
 reported by JMH at the end! A solid choice is 20 iterations.
 - If you really want to get that measurement error margin to be as small as
-  possible, reboot your machine and run your JMH benchmarks without anything
-  else running on your system. No browser, IDE etc taking up CPU time.
-  You can go even further by turning off dynamic CPU frequency scaling in your
-  system BIOS.
-  
+possible, reboot your machine and run your JMH benchmarks without anything
+else running on your system. No browser, IDE etc taking up CPU time.
+You can go even further by turning off dynamic CPU frequency scaling in your
+system BIOS.
+- Sometimes you need to know more than just the average time to run your
+benchmark. `@BenchmarkMode(Mode.SampleTime)` can show you a distribution
+with percentiles for the time it takes to run your bench method.
+- Be _extremely_ wary of dead code elimination; see
+[JMH sample 8][]. You should pretty much always be returning a
+value from your benchmark or using a Blackhole (see
+[JMH sample 9][]).
+- To test performance of code where several threads are doing different
+work (e.g. one thread reading data, one writing data), use JMH thread
+groups. See [JMH sample 15][] for details.
+- If you need to use some custom operation/event counters in your
+benchmarks, use JMH's `AuxCounters`. See [JMH sample 23][].
+- If you really need a specific invocation count to avoid variance,
+instead of looping in the benchmark, use JMH `batchSize` to control the
+number of calls per invocation. See [JMH sample 26][].
+- Use JMH `@Param` to control benchmark configuration. For instance,
+seeing performance change as the size of an array changes. See
+[JMH sample 27][].
+- JMH also has some built-in profilers you can use. `stack` profiler is
+a simple sampling profiler that can show hot methods. The **`gc`
+profiler is _amazing_ for understanding garbage creation rate** etc. See
+[JMH sample 35][]. NOTE: Using multiple benchmark forks is even
+more important if using profilers to reduce measurement error margin.
+
+[JMH sample 8]:https://github.com/Valloric/jmh-playground/blob/master/src/jmh/java/org/openjdk/jmh/samples/JMHSample_08_DeadCode.java
+[JMH sample 9]: https://github.com/Valloric/jmh-playground/blob/master/src/jmh/java/org/openjdk/jmh/samples/JMHSample_09_Blackholes.java
+[JMH sample 15]: https://github.com/Valloric/jmh-playground/blob/master/src/jmh/java/org/openjdk/jmh/samples/JMHSample_15_Asymmetric.java
+[JMH sample 23]: https://github.com/Valloric/jmh-playground/blob/master/src/jmh/java/org/openjdk/jmh/samples/JMHSample_23_AuxCounters.java
+[JMH sample 26]: https://github.com/Valloric/jmh-playground/blob/master/src/jmh/java/org/openjdk/jmh/samples/JMHSample_26_BatchSize.java
+[JMH sample 27]: https://github.com/Valloric/jmh-playground/blob/master/src/jmh/java/org/openjdk/jmh/samples/JMHSample_27_Params.java
+[JMH sample 35]: https://github.com/Valloric/jmh-playground/blob/master/src/jmh/java/org/openjdk/jmh/samples/JMHSample_35_Profilers.java
 
 ## JMH command-line options
 
