@@ -92,11 +92,16 @@ number of calls per invocation. See [JMH sample 26][].
 - Use JMH `@Param` to control benchmark configuration. For instance,
 seeing performance change as the size of an array changes. See
 [JMH sample 27][].
-- JMH also has some built-in profilers you can use. `stack` profiler is
-a simple sampling profiler that can show hot methods. The **`gc`
-profiler is _amazing_ for understanding garbage creation rate** etc. See
-[JMH sample 35][]. NOTE: Using multiple benchmark forks is even
-more important if using profilers to reduce measurement error margin.
+- JMH also has some built-in profilers you can use. See [JMH sample
+35][]. NOTE: Using multiple benchmark forks is even more important if
+using profilers to reduce measurement error margin.
+  - the `stack` profiler is a simple sampling profiler that can show
+  hot methods.
+  - the **`gc` profiler is _amazing_ for understanding garbage creation
+  rate** etc.
+  - the `perfnorm` profiler uses Linux [`perf`][] command to read **CPU
+  hardware counters for branch misses, cache loads/stores/misses etc.**
+  It also normalizes the values to benchmark iterations.
 
 [JMH sample 8]:https://github.com/Valloric/jmh-playground/blob/master/src/jmh/java/org/openjdk/jmh/samples/JMHSample_08_DeadCode.java
 [JMH sample 9]: https://github.com/Valloric/jmh-playground/blob/master/src/jmh/java/org/openjdk/jmh/samples/JMHSample_09_Blackholes.java
@@ -105,6 +110,7 @@ more important if using profilers to reduce measurement error margin.
 [JMH sample 26]: https://github.com/Valloric/jmh-playground/blob/master/src/jmh/java/org/openjdk/jmh/samples/JMHSample_26_BatchSize.java
 [JMH sample 27]: https://github.com/Valloric/jmh-playground/blob/master/src/jmh/java/org/openjdk/jmh/samples/JMHSample_27_Params.java
 [JMH sample 35]: https://github.com/Valloric/jmh-playground/blob/master/src/jmh/java/org/openjdk/jmh/samples/JMHSample_35_Profilers.java
+[perf]: https://en.wikipedia.org/wiki/Perf_(Linux)
 
 ## JMH command-line options
 
