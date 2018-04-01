@@ -99,9 +99,9 @@ using profilers to reduce measurement error margin.
   hot methods.
   - The **`gc` profiler is _amazing_ for understanding garbage creation
   rate** etc.
-  - The `perfnorm` profiler uses Linux [`perf`][] command to read **CPU
-  hardware counters for branch misses, cache loads/stores/misses etc.**
-  It also normalizes the values to benchmark iterations.
+  - The `perfnorm` profiler uses Linux [`perf`][perf] command to read
+  **CPU hardware counters for branch misses, cache loads/stores/misses
+  etc.** It also normalizes the values to benchmark iterations.
 
 [JMH sample 8]:https://github.com/Valloric/jmh-playground/blob/master/src/jmh/java/org/openjdk/jmh/samples/JMHSample_08_DeadCode.java
 [JMH sample 9]: https://github.com/Valloric/jmh-playground/blob/master/src/jmh/java/org/openjdk/jmh/samples/JMHSample_09_Blackholes.java
