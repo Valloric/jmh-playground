@@ -102,8 +102,12 @@ using profilers to reduce measurement error margin.
   - The `perfnorm` profiler uses Linux [`perf`][perf] command to read
   **CPU hardware counters for branch misses, cache loads/stores/misses
   etc.** It also normalizes the values to benchmark iterations.
+- `Blackhole.consumeCPU(tokens)` is the JMH-recommended way of ensuring
+the CPU does something (in case you need that). Useful for benchmarks
+where you use the GC profiler to see garbage creation rate and don't
+actually care about the measurement time.
 
-[JMH sample 8]:https://github.com/Valloric/jmh-playground/blob/master/src/jmh/java/org/openjdk/jmh/samples/JMHSample_08_DeadCode.java
+[JMH sample 8]: https://github.com/Valloric/jmh-playground/blob/master/src/jmh/java/org/openjdk/jmh/samples/JMHSample_08_DeadCode.java
 [JMH sample 9]: https://github.com/Valloric/jmh-playground/blob/master/src/jmh/java/org/openjdk/jmh/samples/JMHSample_09_Blackholes.java
 [JMH sample 15]: https://github.com/Valloric/jmh-playground/blob/master/src/jmh/java/org/openjdk/jmh/samples/JMHSample_15_Asymmetric.java
 [JMH sample 23]: https://github.com/Valloric/jmh-playground/blob/master/src/jmh/java/org/openjdk/jmh/samples/JMHSample_23_AuxCounters.java

@@ -121,7 +121,7 @@ public class JMHSample_21_ConsumeCPU {
     /*
      * ============================== HOW TO RUN THIS TEST: ====================================
      *
-     * Note the single token is just a few cycles, and the more tokens
+     * Note the single token is just a few cycles, and the more _tokens
      * you request, then more work is spent (almost linearly)
      *
      * You can run this test:
