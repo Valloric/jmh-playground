@@ -75,29 +75,30 @@ public class LambdaOverhead {
     runAndBlackhole(() -> Blackhole.consumeCPU(_tokens), blackhole);
   }
 
-  // RESULTS!
-  //  Benchmark                                                (_tokens)  Mode  Cnt    Score    Error   Units
-  //  LambdaOverhead.control                                          10  avgt   10   17.068 ±  0.559   ns/op
-  //  LambdaOverhead.control:·gc.alloc.rate                           10  avgt   10  595.805 ± 19.603  MB/sec
-  //  LambdaOverhead.control:·gc.alloc.rate.norm                      10  avgt   10   16.000 ±  0.001    B/op
-  //  LambdaOverhead.control:·gc.churn.PS_Eden_Space                  10  avgt   10  603.161 ± 28.736  MB/sec
-  //  LambdaOverhead.control:·gc.churn.PS_Eden_Space.norm             10  avgt   10   16.197 ±  0.552    B/op
-  //  LambdaOverhead.control:·gc.churn.PS_Survivor_Space              10  avgt   10    0.094 ±  0.037  MB/sec
-  //  LambdaOverhead.control:·gc.churn.PS_Survivor_Space.norm         10  avgt   10    0.003 ±  0.001    B/op
-  //  LambdaOverhead.control:·gc.count                                10  avgt   10  149.000           counts
-  //  LambdaOverhead.control:·gc.time                                 10  avgt   10   74.000               ms
-  //  LambdaOverhead.noLambda                                         10  avgt   10   12.585 ±  0.441   ns/op
-  //  LambdaOverhead.noLambda:·gc.alloc.rate                          10  avgt   10   ≈ 10⁻⁴           MB/sec
-  //  LambdaOverhead.noLambda:·gc.alloc.rate.norm                     10  avgt   10   ≈ 10⁻⁵             B/op
-  //  LambdaOverhead.noLambda:·gc.count                               10  avgt   10      ≈ 0           counts
-  //  LambdaOverhead.withCaptureLambda                                10  avgt   10   12.766 ±  0.542   ns/op
-  //  LambdaOverhead.withCaptureLambda:·gc.alloc.rate                 10  avgt   10   ≈ 10⁻⁴           MB/sec
-  //  LambdaOverhead.withCaptureLambda:·gc.alloc.rate.norm            10  avgt   10   ≈ 10⁻⁵             B/op
-  //  LambdaOverhead.withCaptureLambda:·gc.count                      10  avgt   10      ≈ 0           counts
-  //  LambdaOverhead.withNoCaptureLambda                              10  avgt   10   12.711 ±  0.417   ns/op
-  //  LambdaOverhead.withNoCaptureLambda:·gc.alloc.rate               10  avgt   10   ≈ 10⁻⁴           MB/sec
-  //  LambdaOverhead.withNoCaptureLambda:·gc.alloc.rate.norm          10  avgt   10   ≈ 10⁻⁵             B/op
-  //  LambdaOverhead.withNoCaptureLambda:·gc.count                    10  avgt   10      ≈ 0           counts
+  // RESULTS! (When run with `-prof gc`)
+  //
+  // Benchmark                                                (_tokens)  Mode  Cnt    Score    Error   Units
+  // LambdaOverhead.control                                          10  avgt   10   17.068 ±  0.559   ns/op
+  // LambdaOverhead.control:·gc.alloc.rate                           10  avgt   10  595.805 ± 19.603  MB/sec
+  // LambdaOverhead.control:·gc.alloc.rate.norm                      10  avgt   10   16.000 ±  0.001    B/op
+  // LambdaOverhead.control:·gc.churn.PS_Eden_Space                  10  avgt   10  603.161 ± 28.736  MB/sec
+  // LambdaOverhead.control:·gc.churn.PS_Eden_Space.norm             10  avgt   10   16.197 ±  0.552    B/op
+  // LambdaOverhead.control:·gc.churn.PS_Survivor_Space              10  avgt   10    0.094 ±  0.037  MB/sec
+  // LambdaOverhead.control:·gc.churn.PS_Survivor_Space.norm         10  avgt   10    0.003 ±  0.001    B/op
+  // LambdaOverhead.control:·gc.count                                10  avgt   10  149.000           counts
+  // LambdaOverhead.control:·gc.time                                 10  avgt   10   74.000               ms
+  // LambdaOverhead.noLambda                                         10  avgt   10   12.585 ±  0.441   ns/op
+  // LambdaOverhead.noLambda:·gc.alloc.rate                          10  avgt   10   ≈ 10⁻⁴           MB/sec
+  // LambdaOverhead.noLambda:·gc.alloc.rate.norm                     10  avgt   10   ≈ 10⁻⁵             B/op
+  // LambdaOverhead.noLambda:·gc.count                               10  avgt   10      ≈ 0           counts
+  // LambdaOverhead.withCaptureLambda                                10  avgt   10   12.766 ±  0.542   ns/op
+  // LambdaOverhead.withCaptureLambda:·gc.alloc.rate                 10  avgt   10   ≈ 10⁻⁴           MB/sec
+  // LambdaOverhead.withCaptureLambda:·gc.alloc.rate.norm            10  avgt   10   ≈ 10⁻⁵             B/op
+  // LambdaOverhead.withCaptureLambda:·gc.count                      10  avgt   10      ≈ 0           counts
+  // LambdaOverhead.withNoCaptureLambda                              10  avgt   10   12.711 ±  0.417   ns/op
+  // LambdaOverhead.withNoCaptureLambda:·gc.alloc.rate               10  avgt   10   ≈ 10⁻⁴           MB/sec
+  // LambdaOverhead.withNoCaptureLambda:·gc.alloc.rate.norm          10  avgt   10   ≈ 10⁻⁵             B/op
+  // LambdaOverhead.withNoCaptureLambda:·gc.count                    10  avgt   10      ≈ 0           counts
   //
   // The interesting line to look at for each benchmark is gc.alloc.rate.norm
   // which shows the heap allocation rate per benchmark iteration.
