@@ -10,7 +10,7 @@ plugins {
 sourceSets {
   main {
     java {
-      srcDirs = ['src/jmh']
+      srcDirs = ['src/jmh/java']
     }
   }
 }
