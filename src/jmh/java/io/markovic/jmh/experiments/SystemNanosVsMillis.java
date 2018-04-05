@@ -30,7 +30,7 @@ public class SystemNanosVsMillis {
   // SystemNanosVsMillis.currentTimeMillis  avgt   10  20.649 ± 0.042  ns/op
   // SystemNanosVsMillis.nanoTime           avgt   10  19.191 ± 0.061  ns/op
   //
-  // This was measured on a system running Linux 4.9. Seems like the concern
-  // that System.nanoTime() is much slower than currentTimeMillis is unfounded!
-  // (Well, at least on Linux.)
+  // This was measured on a system running Linux 4.9; CPU: Intel Core i5-4590.
+  // Seems like the concern that System.nanoTime() is much slower than
+  // currentTimeMillis is unfounded! (Well, at least on Linux.)
 }
