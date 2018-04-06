@@ -32,6 +32,7 @@ shadowJar {
 }
 
 dependencies {
+  compile 'net.time4j:time4j-core:4.36'
   compile 'org.openjdk.jmh:jmh-core:1.20'
   annotationProcessor 'org.openjdk.jmh:jmh-generator-annprocess:1.20'
 }
