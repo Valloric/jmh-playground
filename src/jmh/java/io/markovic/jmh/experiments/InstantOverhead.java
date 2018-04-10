@@ -3,6 +3,7 @@ package io.markovic.jmh.experiments;
 import java.time.Clock;
 import java.time.Duration;
 import java.time.Instant;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
@@ -57,28 +58,44 @@ public class InstantOverhead {
     blackhole.consume(Duration.between(start, Instant.now()));  // NO toMillis!
   }
 
+  @Benchmark
+  public void instantCreationWithoutClock(Blackhole blackhole) {
+    Instant instant = Instant.ofEpochMilli(
+        ThreadLocalRandom.current().nextInt(1, 1000));
+    useInstant(instant, blackhole);
+  }
+
+  private void useInstant(Instant instant, Blackhole blackhole) {
+    blackhole.consume(instant.toEpochMilli());
+  }
 
   // RESULTS! (When run with `-prof gc`)
   //
-  // Benchmark                                        Mode  Cnt    Score    Error   Units
-  // InstantOverhead.control                          avgt   10    2.116 ±  0.005   ms/op
-  // InstantOverhead.control:·gc.alloc.rate           avgt   10    0.032 ±  0.001  MB/sec
-  // InstantOverhead.control:·gc.alloc.rate.norm      avgt   10  105.164 ±  0.747    B/op
-  // InstantOverhead.control:·gc.count                avgt   10      ≈ 0           counts
-  // InstantOverhead.rawMillis                        avgt   10    2.114 ±  0.003   ms/op
-  // InstantOverhead.rawMillis:·gc.alloc.rate         avgt   10   ≈ 10⁻⁴           MB/sec
-  // InstantOverhead.rawMillis:·gc.alloc.rate.norm    avgt   10    0.919 ±  0.032    B/op
-  // InstantOverhead.rawMillis:·gc.count              avgt   10      ≈ 0           counts
-  // InstantOverhead.withClock                        avgt   10    2.115 ±  0.005   ms/op
-  // InstantOverhead.withClock:·gc.alloc.rate         avgt   10    0.022 ±  0.001  MB/sec
-  // InstantOverhead.withClock:·gc.alloc.rate.norm    avgt   10   73.176 ±  0.705    B/op
-  // InstantOverhead.withClock:·gc.count              avgt   10      ≈ 0           counts
-  // InstantOverhead.withInstant                      avgt   10    2.108 ±  0.017   ms/op
-  // InstantOverhead.withInstant:·gc.alloc.rate       avgt   10    0.032 ±  0.001  MB/sec
-  // InstantOverhead.withInstant:·gc.alloc.rate.norm  avgt   10  105.152 ±  0.721    B/op
-  // InstantOverhead.withInstant:·gc.count            avgt   10      ≈ 0           counts
+  // Benchmark                                                        Mode  Cnt    Score    Error   Units
+  // InstantOverhead.control                                          avgt   10    2.109 ±  0.005   ms/op
+  // InstantOverhead.control:·gc.alloc.rate                           avgt   10    0.032 ±  0.001  MB/sec
+  // InstantOverhead.control:·gc.alloc.rate.norm                      avgt   10  105.167 ±  0.714    B/op
+  // InstantOverhead.control:·gc.count                                avgt   10      ≈ 0           counts
+  // InstantOverhead.instantCreationWithoutClock                      avgt   10   ≈ 10⁻⁵            ms/op
+  // InstantOverhead.instantCreationWithoutClock:·gc.alloc.rate       avgt   10   ≈ 10⁻⁴           MB/sec
+  // InstantOverhead.instantCreationWithoutClock:·gc.alloc.rate.norm  avgt   10   ≈ 10⁻⁵             B/op
+  // InstantOverhead.instantCreationWithoutClock:·gc.count            avgt   10      ≈ 0           counts
+  // InstantOverhead.rawMillis                                        avgt   10    2.109 ±  0.003   ms/op
+  // InstantOverhead.rawMillis:·gc.alloc.rate                         avgt   10   ≈ 10⁻⁴           MB/sec
+  // InstantOverhead.rawMillis:·gc.alloc.rate.norm                    avgt   10    0.917 ±  0.033    B/op
+  // InstantOverhead.rawMillis:·gc.count                              avgt   10      ≈ 0           counts
+  // InstantOverhead.withClock                                        avgt   10    2.107 ±  0.010   ms/op
+  // InstantOverhead.withClock:·gc.alloc.rate                         avgt   10    0.022 ±  0.001  MB/sec
+  // InstantOverhead.withClock:·gc.alloc.rate.norm                    avgt   10   73.145 ±  0.724    B/op
+  // InstantOverhead.withClock:·gc.count                              avgt   10      ≈ 0           counts
+  // InstantOverhead.withInstant                                      avgt   10    2.108 ±  0.004   ms/op
+  // InstantOverhead.withInstant:·gc.alloc.rate                       avgt   10    0.032 ±  0.001  MB/sec
+  // InstantOverhead.withInstant:·gc.alloc.rate.norm                  avgt   10  105.159 ±  0.743    B/op
+  // InstantOverhead.withInstant:·gc.count                            avgt   10      ≈ 0           counts
   //
   // The interesting line to look at for each benchmark is gc.alloc.rate.norm
   // which shows the heap allocation rate per benchmark iteration.
-  // Using Instants & Durations to measure time sadly allocates...
+  // Using Instants & Durations to measure time sadly allocates... but
+  // creating an Instant "manually" won't, much like with Duration (see
+  // DurationOverhead.java).
 }
