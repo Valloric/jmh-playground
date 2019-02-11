@@ -78,8 +78,8 @@ system BIOS.
 benchmark. `@BenchmarkMode(Mode.SampleTime)` can show you a distribution
 with percentiles for the time it takes to run your bench method.
 - Be _extremely_ wary of dead code elimination; see
-[JMH sample 8][]. You should pretty much always be returning a
-value from your benchmark or using a Blackhole (see
+[JMH sample 8][]. **You should basically always be returning a
+value from your benchmark or using a Blackhole** (see
 [JMH sample 9][]).
 - To test performance of code where several threads are doing different
 work (e.g. one thread reading data, one writing data), use JMH thread
