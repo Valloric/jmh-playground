@@ -1,8 +1,8 @@
 plugins {
   // For building the final jar
-  id 'com.github.johnrengelman.shadow' version '2.0.3'
+  id 'com.github.johnrengelman.shadow' version '5.1.0'
   // For annotation processing
-  id 'net.ltgt.apt' version '0.15'
+  id 'net.ltgt.apt' version '0.21'
   id 'java'
   id 'idea'
 }
@@ -32,10 +32,10 @@ shadowJar {
 }
 
 dependencies {
-  compile 'net.time4j:time4j-core:4.36'
-  compile 'org.apache.commons:commons-lang3:3.7'
-  compile 'org.openjdk.jmh:jmh-core:1.20'
-  annotationProcessor 'org.openjdk.jmh:jmh-generator-annprocess:1.20'
+  compile 'net.time4j:time4j-core:4.38'
+  compile 'org.apache.commons:commons-lang3:3.9'
+  compile 'org.openjdk.jmh:jmh-core:1.21'
+  annotationProcessor 'org.openjdk.jmh:jmh-generator-annprocess:1.21'
 }
 
 // Running `./gradlew` runs these tasks by default
