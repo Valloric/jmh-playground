@@ -1,6 +1,6 @@
 plugins {
   // For building the final jar
-  id 'com.github.johnrengelman.shadow' version '5.1.0'
+  id 'com.github.johnrengelman.shadow' version '5.2.0'
   // For annotation processing
   id 'net.ltgt.apt' version '0.21'
   id 'java'
