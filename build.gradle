@@ -34,8 +34,8 @@ shadowJar {
 dependencies {
   compile 'net.time4j:time4j-core:4.38'
   compile 'org.apache.commons:commons-lang3:3.9'
-  compile 'org.openjdk.jmh:jmh-core:1.21'
-  annotationProcessor 'org.openjdk.jmh:jmh-generator-annprocess:1.21'
+  compile 'org.openjdk.jmh:jmh-core:1.22'
+  annotationProcessor 'org.openjdk.jmh:jmh-generator-annprocess:1.22'
 }
 
 // Running `./gradlew` runs these tasks by default
